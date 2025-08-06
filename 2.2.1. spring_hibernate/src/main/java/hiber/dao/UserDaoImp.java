@@ -2,12 +2,14 @@ package hiber.dao;
 
 import hiber.model.Car;
 import hiber.model.User;
+import org.hibernate.NonUniqueResultException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
@@ -42,12 +44,17 @@ public class UserDaoImp implements UserDao {
     }
 
     @Override
-    public List<User> findUserByCarModelAndSeries(String model, int series) {
+    public User findUserByCarModelAndSeries(String model, int series) {
         String hql = "SELECT u FROM User u JOIN u.car c WHERE c.model = :model AND c.series = :series";
         Session session = sessionFactory.getCurrentSession();
         Query query = session.createQuery(hql);
         query.setParameter("model", model);
         query.setParameter("series", series);
-        return query.getResultList();
+        try {
+            return (User) query.getSingleResult();
+        } catch (Exception e) {
+            System.out.println("Ошибка при выполнении запроса: " + e.getMessage());
+            return null;
+        }
     }
 }

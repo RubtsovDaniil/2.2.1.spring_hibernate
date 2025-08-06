@@ -14,10 +14,8 @@ public class MainApp {
     public static void main(String[] args) throws SQLException {
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext(AppConfig.class);
-
         UserService userService = context.getBean(UserService.class);
         CarService carService = context.getBean(CarService.class);
-
 
         userService.add(new User("User1", "Lastname1", "user1@mail.ru"));
         userService.add(new User("User2", "Lastname2", "user2@mail.ru"));
@@ -38,25 +36,16 @@ public class MainApp {
             System.out.println();
         }
 
-
-        List<User> usersWithCars = userService.findUserByCarModelAndSeries("BMW", 1);
-
-        for (User user : usersWithCars) {
-            Car car = user.getCar();
+        User usersWithCars = userService.findUserByCarModelAndSeries("BMW", 4);
+        if (usersWithCars != null) {
+            Car car = usersWithCars.getCar();
             System.out.println("Найден пользователь с автомобилем model " + car.getModel() + " и series " + car.getSeries());
-//            System.out.println("Id = " + user.getId());
-            System.out.println("First Name = " + user.getFirstName());
-            System.out.println("Last Name = " + user.getLastName());
-            System.out.println("Email = " + user.getEmail());
-//            Car car = user.getCar();
-//            if (car != null) {
-//                System.out.println("Car Id = " + car.getId());
-//                System.out.println("Model = " + car.getModel());
-//                System.out.println("Series = " + car.getSeries());
-//            } else {
-//                System.out.println("У пользователя нет автомобиля.");
-//            }
+            System.out.println("First Name = " + usersWithCars.getFirstName());
+            System.out.println("Last Name = " + usersWithCars.getLastName());
+            System.out.println("Email = " + usersWithCars.getEmail());
             System.out.println();
+        } else {
+            System.out.println("Не верные параметры запроса");
         }
 
         context.close();
