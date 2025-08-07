@@ -36,7 +36,7 @@ public class MainApp {
             System.out.println();
         }
 
-        User usersWithCars = userService.findUserByCarModelAndSeries("BMW", 4);
+        User usersWithCars = userService.findUserByCarModelAndSeries("BMW", 1);
         if (usersWithCars != null) {
             Car car = usersWithCars.getCar();
             System.out.println("Найден пользователь с автомобилем model " + car.getModel() + " и series " + car.getSeries());
